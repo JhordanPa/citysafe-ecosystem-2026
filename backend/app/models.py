@@ -19,7 +19,7 @@ class IncidenteDB(Base):
     longitud = Column(Float, nullable=False)
     nivel_urgencia = Column(Integer, default=1) 
     descripcion = Column(String, nullable=True)
-    fecha_reporte = Column(DateTime, default=datetime.utcnow)
+    fecha_reporte = Column(DateTime, default=datetime.cnow)
     
     
     usuario_id = Column(Integer, ForeignKey("usuarios.id"))
