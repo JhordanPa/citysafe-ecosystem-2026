@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:m3e_core/m3e_core.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:m3e_core/m3e_core.dart';
+
 import 'incident_card.dart';
 
 class IncidentListArea extends StatelessWidget {
@@ -8,6 +9,7 @@ class IncidentListArea extends StatelessWidget {
   final String? selectedCategory;
   final Future<void> Function() onRefresh;
   final VoidCallback onReportEmergency;
+  final Function(int)? onDeleteIncident;
 
   const IncidentListArea({
     super.key,
@@ -15,6 +17,7 @@ class IncidentListArea extends StatelessWidget {
     required this.selectedCategory,
     required this.onRefresh,
     required this.onReportEmergency,
+    this.onDeleteIncident,
   });
 
   @override
@@ -130,7 +133,14 @@ class IncidentListArea extends StatelessWidget {
                     sliver: SliverList(
                       delegate: SliverChildBuilderDelegate(
                         (context, index) {
-                          return IncidentCard(incident: incidents[index], index: index);
+                          final incident = incidents[index];
+                          return IncidentCard(
+                            incident: incident, 
+                            index: index,
+                            onDelete: onDeleteIncident != null
+                                ? () => onDeleteIncident!(incident['id'])
+                                : null,
+                          );
                         },
                         childCount: incidents.length,
                       ),
