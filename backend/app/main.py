@@ -72,3 +72,22 @@ def reportar_incidente(
 def listar_incidentes(db: Session = Depends(database.get_db)):
    
     return db.query(models.IncidenteDB).all()
+
+#Funcion de borrado para los incidentes registrados
+@app.delete("/incidentes/{incidente_id}", tags=["Incidentes y Despacho"])
+def eliminar_incidente(
+    incidente_id: int, 
+    db: Session = Depends(database.get_db),
+    current_user: models.UsuarioDB = Depends(get_current_user)
+):
+    incidente = db.query(models.IncidenteDB).filter(models.IncidenteDB.id == incidente_id).first()
+    if not incidente:
+        raise HTTPException(status_code=404, detail="Incidente no encontrado")
+    
+    # Permite borrar solo al creador de los incidentes
+    if incidente.usuario_id != current_user.id:
+        raise HTTPException(status_code=403, detail="No autorizado para eliminar este incidente")
+        
+    db.delete(incidente)
+    db.commit()
+    return {"message": "Incidente eliminado exitosamente"}
