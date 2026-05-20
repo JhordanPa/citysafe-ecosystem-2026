@@ -1,4 +1,4 @@
-¡¡¡CitySafe Ecosystem 2026!!!
+**CitySafe Ecosystem 2026**
 Sistema de Monitoreo Urbano y Gestión de Alertas de Seguridad
 
 ## Integrantes
