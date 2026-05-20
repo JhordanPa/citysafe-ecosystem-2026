@@ -2,13 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'screens/home_screen.dart';
+import 'screens/login_screen.dart'; 
+import 'services/api_service.dart';
 
-void main() {
-  runApp(const MyApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await ApiService().loadToken();
+  final bool isAuthenticated = ApiService().isAuthenticated;
+  runApp(MyApp(isAuthenticated: isAuthenticated));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final bool isAuthenticated;
+
+  const MyApp({super.key, required this.isAuthenticated});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +27,7 @@ class MyApp extends StatelessWidget {
         textTheme: GoogleFonts.outfitTextTheme(),
         useMaterial3: true,
       ),
-      home: const HomeScreen(),
+      home: isAuthenticated ? const HomeScreen() : const LoginScreen(),
     );
   }
 }
