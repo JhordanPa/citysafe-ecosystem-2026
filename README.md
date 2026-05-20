@@ -15,57 +15,57 @@ Recuerde descromprimir el .zip en la raiz del sistema.
 1. **Apertura de una terminal con ubicacion a la carpeta**
 Abra una nueva terminal con ubicacion a esta carpeta principal `citysafe-ecosystem-2026-main`
 
-    ```bash
+    bash
     cd citysafe-ecosystem-2026-main
-    ```
+    
 
 Si el nombre lo ha cambiado, reemplazarlo.
 
-    ```bash
+    bash
     cd nombre_nuevo
-    ```
+    
 
 _Todo esto teniendo en cuenta que el archivo .zip fue descomprimido en la raíz del sistema_
 
 2. **Instalacion de dependencias y requerimientos**
 Escriba los comandos siguientes:
 
-    ```bash
+    bash
     chmod +x mandatory.sh
     ./mandatory.sh
-    ```
+    
 
 Espere la instalacion de todos los archivos...
 
 3. **Iniciando la base de datos**
 Ya terminado la instalación, ingrese a la carpeta /backend desde la terminal.
 
-    ```bash
+    bash
     cd backend
-    ```
+    
 
 Una vez dentro, ejecute los comandos:
 
-    ```bash
+    bash
     source venv/bin/activate
     uvicorn app.main:app --reload
-    ```
+    
 
 La base de datos habrá sido iniciada correctamente
 
 4. **Iniciando el aplicativo**
 Abra una nueva terminal con ubicacion a la carpeta principal en la que estamos trabajando.
 
-    ```bash
+    bash
     cd citysafe-ecosystem-2026-main
-    ```
+    
 
 Nos dirigimos a iniciar el aplicativo ahora...
 
-    ```bash
+    bash
     cd mobile
     flutter run -d tipo_de_inicio
-    ```
+    
 
 El tipo_de_inicio reemplazarlo por cualquiera de su preferencia:
     web-server
