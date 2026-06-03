@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from typing import List
+from datetime import datetime
 from . import models, schemas, auth, database
 
 models.Base.metadata.create_all(bind=database.engine)
@@ -60,7 +61,23 @@ def reportar_incidente(
     db: Session = Depends(database.get_db), 
     current_user: models.UsuarioDB = Depends(get_current_user)
 ):
-   
+  
+    # Esto busca si el usuario/sensor ya tiene un incidente del mismo tipo
+    incidente_existente = db.query(models.IncidenteDB).filter(
+        models.IncidenteDB.tipo == incidente.tipo,
+        models.IncidenteDB.usuario_id == current_user.id
+    ).first()
+
+    # Si existe y es de un dispositivo IoT, se actualizan los datos
+    if incidente_existente and incidente.tipo in ["Alarma Acústica", "Botón de Pánico"]: #Se pueden agregar más iot si se desea
+        incidente_existente.descripcion = incidente.descripcion
+        incidente_existente.nivel_urgencia = incidente.nivel_urgencia
+        incidente_existente.fecha_reporte = datetime.now()
+        db.commit()
+        db.refresh(incidente_existente)
+        return incidente_existente
+
+    # Si no existe y no es un IoT, se crea un informe con normalidad.
     nuevo_incidente = models.IncidenteDB(**incidente.model_dump(), usuario_id=current_user.id)
     db.add(nuevo_incidente)
     db.commit()
