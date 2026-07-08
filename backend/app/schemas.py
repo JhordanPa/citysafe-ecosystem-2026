@@ -5,6 +5,7 @@ from datetime import datetime
 # --- ESQUEMAS PARA USUARIO ---
 class UsuarioBase(BaseModel):
     username: str
+    rol: str = "ciudadano"
 
 class UsuarioCreate(UsuarioBase):
     password: str
