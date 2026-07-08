@@ -1,0 +1,77 @@
+[gd_scene load_steps=12 format=3 uid="uid://4a2xxnao5jkd"]
+
+[ext_resource type="Script" uid="uid://c8lx8fileblqo" path="res://centro_control.gd" id="1_pd0fw"]
+[ext_resource type="Texture2D" uid="uid://bnev6f6v0ckk4" path="res://fondo.png" id="2_khqro"]
+[ext_resource type="Script" uid="uid://drxw5o8nugqq4" path="res://totem_panico.gd" id="2_pgtap"]
+[ext_resource type="Texture2D" uid="uid://b18pnxua6sa1r" path="res://lima-old-town-map.jpg" id="2_uha65"]
+[ext_resource type="Texture2D" uid="uid://dnde6hbchmsxc" path="res://faro.png" id="3_m0hpb"]
+[ext_resource type="Script" uid="uid://bekn2hv5vudtv" path="res://jugador.gd" id="3_pgtap"]
+[ext_resource type="Texture2D" uid="uid://dng6x51y1r44p" path="res://button-icon-3d-render-illustration-png.png" id="4_v5t2s"]
+[ext_resource type="Texture2D" uid="uid://cr5trd8rb53wm" path="res://persona.png" id="5_uha65"]
+[ext_resource type="AudioStream" uid="uid://coxy6oksy8iva" path="res://ElevenLabs_Alarma_de_emergencia_de_una_instalación_nuclear.mp3" id="7_jvhea"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lgns8"]
+size = Vector2(52, 269.5625)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5hio4"]
+size = Vector2(79, 133)
+
+[node name="CentroControl" type="Node2D"]
+script = ExtResource("1_pd0fw")
+
+[node name="LimaOldTownMap" type="Sprite2D" parent="."]
+position = Vector2(777.875, 585)
+scale = Vector2(0.5432344, 0.4722933)
+texture = ExtResource("2_uha65")
+
+[node name="Fondo" type="Sprite2D" parent="."]
+position = Vector2(581.8125, 839.5)
+scale = Vector2(1.3562502, 0.9022436)
+texture = ExtResource("2_khqro")
+
+[node name="HTTPRequest" type="HTTPRequest" parent="."]
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 2.0
+autostart = true
+
+[node name="TotemPanico" type="Area2D" parent="."]
+position = Vector2(655, 713)
+script = ExtResource("2_pgtap")
+
+[node name="Sprite2D" type="Sprite2D" parent="TotemPanico"]
+position = Vector2(229.00002, 226.00002)
+scale = Vector2(0.8298102, 0.84000003)
+texture = ExtResource("3_m0hpb")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TotemPanico"]
+position = Vector2(230, 221)
+shape = SubResource("RectangleShape2D_lgns8")
+
+[node name="Sprite2D2" type="Sprite2D" parent="TotemPanico"]
+position = Vector2(218.00002, 228.00002)
+rotation = -1.567312
+scale = Vector2(0.10648148, 0.12651306)
+texture = ExtResource("4_v5t2s")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="TotemPanico"]
+stream = ExtResource("7_jvhea")
+
+[node name="Jugador" type="CharacterBody2D" parent="."]
+position = Vector2(-259, 519)
+script = ExtResource("3_pgtap")
+
+[node name="Sprite2D" type="Sprite2D" parent="Jugador"]
+position = Vector2(413.5, 437.25)
+scale = Vector2(0.47000003, 0.5100001)
+texture = ExtResource("5_uha65")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Jugador"]
+position = Vector2(412, 446)
+shape = SubResource("RectangleShape2D_5hio4")
+
+[node name="Node2D" type="Node2D" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="Node2D"]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Node2D"]
