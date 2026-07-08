@@ -9,7 +9,9 @@ class IncidentListArea extends StatelessWidget {
   final String? selectedCategory;
   final Future<void> Function() onRefresh;
   final VoidCallback onReportEmergency;
+  final VoidCallback? onOpenMap;
   final Function(int)? onDeleteIncident;
+  final bool showFloatingButtons;
 
   const IncidentListArea({
     super.key,
@@ -17,7 +19,9 @@ class IncidentListArea extends StatelessWidget {
     required this.selectedCategory,
     required this.onRefresh,
     required this.onReportEmergency,
+    this.onOpenMap,
     this.onDeleteIncident,
+    this.showFloatingButtons = true,
   });
 
   @override
@@ -45,41 +49,75 @@ class IncidentListArea extends StatelessWidget {
           Positioned(
             top: -size.width * 0.3,
             right: -size.width * 0.2,
-            child: M3EShape(
-              Shapes.circle,
-              width: size.width * 0.9,
-              height: size.width * 0.9,
-              color: theme.colorScheme.primaryContainer.withValues(alpha: 0.5),
-            )
-            .animate(onPlay: (controller) => controller.repeat(reverse: true))
-            .moveY(begin: -15, end: 15, duration: 4.seconds, curve: Curves.easeInOutSine)
-            .animate().scale(duration: 800.ms, curve: Curves.easeOutBack),
+            child:
+                M3EShape(
+                      Shapes.circle,
+                      width: size.width * 0.9,
+                      height: size.width * 0.9,
+                      color: theme.colorScheme.primaryContainer.withValues(
+                        alpha: 0.5,
+                      ),
+                    )
+                    .animate(
+                      onPlay: (controller) => controller.repeat(reverse: true),
+                    )
+                    .moveY(
+                      begin: -15,
+                      end: 15,
+                      duration: 4.seconds,
+                      curve: Curves.easeInOutSine,
+                    )
+                    .animate()
+                    .scale(duration: 800.ms, curve: Curves.easeOutBack),
           ),
           Positioned(
             bottom: -size.width * 0.4,
             left: -size.width * 0.3,
-            child: M3EShape(
-              Shapes.slanted,
-              width: size.width,
-              height: size.width,
-              color: theme.colorScheme.tertiaryContainer.withValues(alpha: 0.4),
-            )
-            .animate(onPlay: (controller) => controller.repeat(reverse: true))
-            .moveX(begin: -20, end: 20, duration: 5.seconds, curve: Curves.easeInOutSine)
-            .animate().slide(duration: 800.ms, curve: Curves.easeOutCubic).fadeIn(),
+            child:
+                M3EShape(
+                      Shapes.slanted,
+                      width: size.width,
+                      height: size.width,
+                      color: theme.colorScheme.tertiaryContainer.withValues(
+                        alpha: 0.4,
+                      ),
+                    )
+                    .animate(
+                      onPlay: (controller) => controller.repeat(reverse: true),
+                    )
+                    .moveX(
+                      begin: -20,
+                      end: 20,
+                      duration: 5.seconds,
+                      curve: Curves.easeInOutSine,
+                    )
+                    .animate()
+                    .slide(duration: 800.ms, curve: Curves.easeOutCubic)
+                    .fadeIn(),
           ),
           Positioned(
             top: size.height * 0.2,
             left: -size.width * 0.15,
-            child: M3EShape(
-              Shapes.circle,
-              width: size.width * 0.4,
-              height: size.width * 0.4,
-              color: theme.colorScheme.secondaryContainer.withValues(alpha: 0.3),
-            )
-            .animate(onPlay: (controller) => controller.repeat(reverse: true))
-            .move(begin: const Offset(15, -15), end: const Offset(-15, 15), duration: 6.seconds, curve: Curves.easeInOutSine)
-            .animate().fadeIn(delay: 400.ms, duration: 800.ms),
+            child:
+                M3EShape(
+                      Shapes.circle,
+                      width: size.width * 0.4,
+                      height: size.width * 0.4,
+                      color: theme.colorScheme.secondaryContainer.withValues(
+                        alpha: 0.3,
+                      ),
+                    )
+                    .animate(
+                      onPlay: (controller) => controller.repeat(reverse: true),
+                    )
+                    .move(
+                      begin: const Offset(15, -15),
+                      end: const Offset(-15, 15),
+                      duration: 6.seconds,
+                      curve: Curves.easeInOutSine,
+                    )
+                    .animate()
+                    .fadeIn(delay: 400.ms, duration: 800.ms),
           ),
 
           // Lista de Reportes
@@ -99,8 +137,14 @@ class IncidentListArea extends StatelessWidget {
                           Icon(
                             Icons.check_circle_outline_rounded,
                             size: 100,
-                            color: theme.colorScheme.primary.withValues(alpha: 0.4),
-                          ).animate().scale(delay: 400.ms, duration: 600.ms, curve: Curves.easeOutBack),
+                            color: theme.colorScheme.primary.withValues(
+                              alpha: 0.4,
+                            ),
+                          ).animate().scale(
+                            delay: 400.ms,
+                            duration: 600.ms,
+                            curve: Curves.easeOutBack,
+                          ),
                           const SizedBox(height: 24),
                           Text(
                             'Todo tranquilo',
@@ -111,7 +155,9 @@ class IncidentListArea extends StatelessWidget {
                           ).animate().fadeIn(delay: 500.ms).slideY(begin: 0.2),
                           const SizedBox(height: 8),
                           Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 48.0),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 48.0,
+                            ),
                             child: Text(
                               selectedCategory == null
                                   ? 'No hay incidentes reportados actualmente en tu ciudad.'
@@ -129,21 +175,22 @@ class IncidentListArea extends StatelessWidget {
                   )
                 else
                   SliverPadding(
-                    padding: const EdgeInsets.only(left: 24.0, right: 24.0, bottom: 100.0),
+                    padding: const EdgeInsets.only(
+                      left: 24.0,
+                      right: 24.0,
+                      bottom: 100.0,
+                    ),
                     sliver: SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                        (context, index) {
-                          final incident = incidents[index];
-                          return IncidentCard(
-                            incident: incident, 
-                            index: index,
-                            onDelete: onDeleteIncident != null
-                                ? () => onDeleteIncident!(incident['id'])
-                                : null,
-                          );
-                        },
-                        childCount: incidents.length,
-                      ),
+                      delegate: SliverChildBuilderDelegate((context, index) {
+                        final incident = incidents[index];
+                        return IncidentCard(
+                          incident: incident,
+                          index: index,
+                          onDelete: onDeleteIncident != null
+                              ? () => onDeleteIncident!(incident['id'])
+                              : null,
+                        );
+                      }, childCount: incidents.length),
                     ),
                   ),
               ],
@@ -151,24 +198,46 @@ class IncidentListArea extends StatelessWidget {
           ),
 
           // FAB posicionado dentro de la tarjeta
-          Positioned(
-            bottom: 16,
-            right: 16,
-            child: FloatingActionButton.extended(
-              onPressed: onReportEmergency,
-              backgroundColor: theme.colorScheme.errorContainer.withValues(alpha: 0.8),
-              foregroundColor: theme.colorScheme.onErrorContainer,
-              elevation: 4,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-              ),
-              icon: const Icon(Icons.add_alert_rounded, size: 28),
-              label: const Text(
-                "Reportar",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          if (showFloatingButtons)
+            Positioned(
+              bottom: 16,
+              right: 16,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  if (onOpenMap != null) ...[
+                    FloatingActionButton.small(
+                      heroTag: 'map_btn',
+                      backgroundColor: theme.colorScheme.tertiaryContainer,
+                      foregroundColor: theme.colorScheme.onTertiaryContainer,
+                      tooltip: 'Mapa de Incidentes',
+                      onPressed: onOpenMap,
+                      child: const Icon(Icons.map_rounded),
+                    ),
+                    const SizedBox(height: 16),
+                  ],
+                  FloatingActionButton.extended(
+                    onPressed: onReportEmergency,
+                    backgroundColor: theme.colorScheme.errorContainer
+                        .withValues(alpha: 0.8),
+                    foregroundColor: theme.colorScheme.onErrorContainer,
+                    elevation: 4,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    icon: const Icon(Icons.add_alert_rounded, size: 28),
+                    label: const Text(
+                      "Reportar",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-          ),
         ],
       ),
     );
