@@ -4,8 +4,10 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../services/api_service.dart';
 import '../widgets/auth/auth_animated_background.dart';
 import '../widgets/auth/auth_logo.dart';
-import '../widgets/common/custom_text_field.dart';
-import '../widgets/common/glass_container.dart';
+import '../widgets/auth/login_form_widget.dart';
+import '../widgets/auth/role_selection.dart';
+import '../widgets/common/custom_popups.dart';
+import 'gestor_home_screen.dart';
 import 'home_screen.dart';
 import 'register_screen.dart';
 
@@ -19,6 +21,8 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   bool _obscurePassword = true;
   bool _isLoading = false;
+  String? _selectedRole;
+
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
 
@@ -27,8 +31,10 @@ class _LoginScreenState extends State<LoginScreen> {
     final password = _passwordController.text.trim();
 
     if (username.isEmpty || password.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Por favor, ingresa tus credenciales')),
+      CustomPopups.showError(
+        context: context,
+        title: 'Campos vacíos',
+        message: 'Por favor, ingresa tus credenciales.',
       );
       return;
     }
@@ -39,20 +45,59 @@ class _LoginScreenState extends State<LoginScreen> {
       final success = await ApiService().login(username, password);
       if (success) {
         if (!mounted) return;
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const HomeScreen()),
+
+        final userRole = ApiService().role;
+
+        if (_selectedRole != null && userRole != _selectedRole) {
+          CustomPopups.showError(
+            context: context,
+            title: 'Acceso denegado',
+            message: 'No tienes permisos de $_selectedRole.',
+          );
+          await ApiService().logout();
+          return;
+        }
+
+        CustomPopups.showWelcome(
+          context: context,
+          title: '¡Bienvenido!',
+          message: 'Has iniciado sesión correctamente.',
         );
+
+        await Future.delayed(const Duration(milliseconds: 1500));
+        if (!mounted) return;
+
+        if (Navigator.of(context, rootNavigator: true).canPop()) {
+          Navigator.of(context, rootNavigator: true).pop();
+        }
+
+        if (userRole == 'gestor') {
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => const GestorHomeScreen()),
+            (Route<dynamic> route) => false,
+          );
+        } else {
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => const HomeScreen()),
+            (Route<dynamic> route) => false,
+          );
+        }
       } else {
         if (!mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Credenciales incorrectas')),
+        CustomPopups.showError(
+          context: context,
+          title: 'Error de autenticación',
+          message: 'Credenciales incorrectas.',
         );
       }
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.toString().replaceAll('Exception: ', ''))),
+      CustomPopups.showError(
+        context: context,
+        title: 'Error',
+        message: e.toString().replaceAll('Exception: ', ''),
       );
     } finally {
       if (mounted) setState(() => _isLoading = false);
@@ -74,9 +119,7 @@ class _LoginScreenState extends State<LoginScreen> {
       backgroundColor: theme.colorScheme.surface,
       body: Stack(
         children: [
-          // 1. Background Shapes
           const AuthAnimatedBackground(),
-
           SafeArea(
             child: Center(
               child: SingleChildScrollView(
@@ -84,123 +127,30 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // 2. Logo y Títulos
                     const AuthLogo(),
-
                     const SizedBox(height: 48),
-
-                    // 3. Contenedor del Formulario (Entra al final, 600ms)
-                    GlassContainer(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Iniciar Sesión',
-                                style: theme.textTheme.titleLarge?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              const SizedBox(height: 24),
-
-                              // TextFields refactorizados
-                              CustomTextField(
-                                hintText: 'Nombre de usuario',
-                                prefixIcon: Icons.person_outline_rounded,
-                                controller: _usernameController,
-                              ),
-                              const SizedBox(height: 16),
-                              CustomTextField(
-                                hintText: 'Contraseña',
-                                prefixIcon: Icons.lock_rounded,
-                                obscureText: _obscurePassword,
-                                controller: _passwordController,
-                                suffixIcon: IconButton(
-                                  icon: Icon(
-                                    _obscurePassword
-                                        ? Icons.visibility_off_rounded
-                                        : Icons.visibility_rounded,
-                                    size: 20,
-                                  ),
-                                  onPressed: () => setState(
-                                    () => _obscurePassword = !_obscurePassword,
-                                  ),
-                                ),
-                              ),
-
-                              Align(
-                                alignment: Alignment.centerRight,
-                                child: TextButton(
-                                  onPressed: () {},
-                                  style: TextButton.styleFrom(
-                                    padding: const EdgeInsets.symmetric(
-                                      vertical: 16,
-                                      horizontal: 8,
-                                    ),
-                                    minimumSize: Size.zero,
-                                    tapTargetSize:
-                                        MaterialTapTargetSize.shrinkWrap,
-                                  ),
-                                  child: Text(
-                                    '¿Olvidaste tu contraseña?',
-                                    style: theme.textTheme.bodySmall?.copyWith(
-                                      color: theme.colorScheme.onSurfaceVariant,
-                                    ),
-                                  ),
-                                ),
-                              ),
-
-                              const SizedBox(height: 16),
-                              SizedBox(
-                                width: double.infinity,
-                                height: 56,
-                                child: FilledButton(
-                                  onPressed: _isLoading ? null : _login,
-                                  style: FilledButton.styleFrom(
-                                    backgroundColor: theme.colorScheme.primary,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(28),
-                                    ),
-                                  ),
-                                  child: _isLoading
-                                      ? const SizedBox(
-                                          height: 24,
-                                          width: 24,
-                                          child: CircularProgressIndicator(
-                                            color: Colors.white,
-                                            strokeWidth: 2,
-                                          ),
-                                        )
-                                      : Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            const Text(
-                                              'Entrar',
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                            const SizedBox(width: 8),
-                                            const Icon(
-                                              Icons.arrow_forward_rounded,
-                                              size: 20,
-                                            ),
-                                          ],
-                                        ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        )
-                        .animate()
-                        .fadeIn(delay: 600.ms, duration: 400.ms)
-                        .slideY(begin: 0.1, curve: Curves.easeOutCubic),
-
+                    AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 500),
+                      switchInCurve: Curves.easeOutBack,
+                      switchOutCurve: Curves.easeIn,
+                      child: _selectedRole == null
+                          ? RoleSelection(
+                              theme: theme,
+                              onRoleSelected: (role) => setState(() => _selectedRole = role),
+                            )
+                          : LoginFormWidget(
+                              theme: theme,
+                              selectedRole: _selectedRole!,
+                              onBack: () => setState(() => _selectedRole = null),
+                              usernameController: _usernameController,
+                              passwordController: _passwordController,
+                              obscurePassword: _obscurePassword,
+                              onTogglePassword: () => setState(() => _obscurePassword = !_obscurePassword),
+                              isLoading: _isLoading,
+                              onLogin: _login,
+                            ),
+                    ),
                     const SizedBox(height: 32),
-
-                    // 4. Enlace de Registro
                     TextButton(
                       onPressed: () {
                         Navigator.pushReplacement(

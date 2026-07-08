@@ -45,6 +45,9 @@ dependencies:
   m3e_expandable: ^0.1.0
   google_fonts: ^8.1.0
   flutter_animate: ^4.5.2
+  geolocator: ^13.0.1
+  maplibre_gl: ^0.26.1
+  geocoding: ^3.0.0
 
 dev_dependencies:
   flutter_test:

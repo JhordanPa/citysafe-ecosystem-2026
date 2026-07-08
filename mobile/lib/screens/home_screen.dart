@@ -4,6 +4,7 @@ import '../services/api_service.dart';
 import '../widgets/home/category_navigation_bar.dart';
 import '../widgets/home/home_app_bar.dart';
 import '../widgets/home/incident_list_area.dart';
+import 'incident_map_screen.dart';
 import 'report_emergency.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -57,14 +58,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
             IconData categoryIcon = Icons.report_problem_rounded;
             final typeLower = i.tipo.toLowerCase();
-            if (typeLower.contains('seguridad'))
+            if (typeLower.contains('seguridad')) {
               categoryIcon = Icons.shield_rounded;
-            else if (typeLower.contains('médic'))
+            } else if (typeLower.contains('médic')) {
               categoryIcon = Icons.medical_services_rounded;
-            else if (typeLower.contains('públic'))
+            } else if (typeLower.contains('públic')) {
               categoryIcon = Icons.construction_rounded;
-            else if (typeLower.contains('civil'))
+            } else if (typeLower.contains('civil')) {
               categoryIcon = Icons.warning_rounded;
+            }
 
             String timeStr = "00:00";
             if (i.fechaReporte.contains('T')) {
@@ -162,6 +164,14 @@ class _HomeScreenState extends State<HomeScreen> {
                       selectedCategory: _selectedCategory,
                       onRefresh: _refreshData,
                       onReportEmergency: _openReportEmergency,
+                      onOpenMap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const IncidentMapScreen(),
+                          ),
+                        );
+                      },
                       onDeleteIncident: _deleteIncident,
                     ),
             ),

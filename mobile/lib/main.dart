@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'screens/gestor_home_screen.dart';
 import 'screens/home_screen.dart';
-import 'screens/login_screen.dart'; 
+import 'screens/login_screen.dart';
 import 'services/api_service.dart';
 
 Future<void> main() async {
@@ -27,7 +28,11 @@ class MyApp extends StatelessWidget {
         textTheme: GoogleFonts.outfitTextTheme(),
         useMaterial3: true,
       ),
-      home: isAuthenticated ? const HomeScreen() : const LoginScreen(),
+      home: isAuthenticated
+          ? (ApiService().role == 'gestor'
+                ? const GestorHomeScreen()
+                : const HomeScreen())
+          : const LoginScreen(),
     );
   }
 }
