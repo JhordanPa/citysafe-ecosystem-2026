@@ -21,7 +21,7 @@ echo -e "${AZUL}[3/5] Instalando Flutter SDK a nivel global...${NC}"
 sudo snap install flutter --classic
 
 # Instala el Backend local
-echo -e "${AZUL}[4/5] Configurando entorno virtual y librerías del Backend...${NC}"
+echo -e "${AZUL}[4/6] Configurando entorno virtual y librerías del Backend...${NC}"
 if [ -d "backend" ]; then
     cd backend
     python3 -m venv venv
@@ -31,6 +31,25 @@ if [ -d "backend" ]; then
     cd ..
 else
     echo "Error: No se encontró la carpeta 'backend'"
+fi
+
+# Configura el entorno virtual para IoT Industrial
+echo -e "${AZUL}[5/6] Configurando entorno virtual de IoT Industrial...${NC}"
+if [ -d "iot_industrial" ]; then
+    cd iot_industrial
+    python3 -m venv venv
+    source venv/bin/activate
+
+    if [ -f "requirements.txt" ]; then
+        pip install -r requirements.txt
+    else
+        echo "No se encontró requirements.txt en iot_industrial."
+    fi
+
+    deactivate
+    cd ..
+else
+    echo "Error: No se encontró la carpeta 'iot_industrial'"
 fi
 
 # Configura el Flutter Mobile local
