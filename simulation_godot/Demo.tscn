@@ -1,0 +1,50 @@
+[gd_scene format=3 uid="uid://bbw85sdo1oepg"]
+
+[ext_resource type="PackedScene" uid="uid://ba85nr6n12lop" path="res://OsmTileMap.tscn" id="1"]
+[ext_resource type="Script" uid="uid://k08fwk8fdemd" path="res://Demo.gd" id="3"]
+[ext_resource type="Animation" path="res://camera_demo.tres" id="4"]
+
+[sub_resource type="Environment" id="1"]
+background_mode = 4
+glow_enabled = true
+glow_intensity = 5.08
+glow_strength = 1.18
+fog_depth_begin = 115.3
+fog_depth_end = 115.3
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_umdxf"]
+_data = {
+&"camera_demo": ExtResource("4")
+}
+
+[sub_resource type="Curve2D" id="3"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 517.797, -105.824, 0, 0, 0, 0, 173.331, 79.9015, 0, 0, 0, 0, 41.5768, 198.957, 0, 0, 0, 0, -85.4152, 354.522, 0, 0, 0, 0, -325.113, 441.829, 0, 0, 0, 0, -234.631, 538.66)
+}
+point_count = 6
+
+[node name="Demo" type="Node2D" unique_id=1596647731]
+script = ExtResource("3")
+
+[node name="OsmTileMap" parent="." unique_id=1091058318 instance=ExtResource("1")]
+latitude = 40.789
+longitude = -73.962
+zoom = 8
+base_url = "https://tile.openstreetmap.org"
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1538856270]
+environment = SubResource("1")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1265021465]
+libraries/ = SubResource("AnimationLibrary_umdxf")
+
+[node name="Path2D" type="Path2D" parent="." unique_id=1607457256]
+curve = SubResource("3")
+
+[node name="PathFollow2D" type="PathFollow2D" parent="Path2D" unique_id=1474126636]
+position = Vector2(517.797, -105.824)
+rotation = 2.6471028
+
+[node name="Camera2D" type="Camera2D" parent="Path2D/PathFollow2D" unique_id=1959045689]
+position = Vector2(51.2523, 0.445953)
+zoom = Vector2(0.5, 0.5)

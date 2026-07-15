@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://ba85nr6n12lop"]
+
+[ext_resource type="Script" uid="uid://chck6yl5nxuva" path="res://OsmTileMap.gd" id="1"]
+
+[node name="OsmTileMap" type="Node2D" unique_id=1938237651]
+script = ExtResource("1")
+latitude = 46.729
+longitude = 2.56
+zoom = 3

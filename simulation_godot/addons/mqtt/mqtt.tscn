@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://ktm7k0co2o7l"]
+
+[ext_resource type="Script" uid="uid://gq8ao6r6suwf" path="res://addons/mqtt/mqtt.gd" id="1_unkqx"]
+
+[node name="MQTT" type="Node" unique_id=2082176496]
+script = ExtResource("1_unkqx")

@@ -1,0 +1,196 @@
+[gd_scene format=3 uid="uid://bexbb46ld4lta"]
+
+[ext_resource type="Script" uid="uid://clx0nnfopkh8h" path="res://dashboard_principal.gd" id="1_iocth"]
+[ext_resource type="PackedScene" uid="uid://ba85nr6n12lop" path="res://OsmTileMap.tscn" id="1_w6jx4"]
+[ext_resource type="Script" uid="uid://bu7ki1jgiv4x6" path="res://camera_2d.gd" id="2_xc3if"]
+[ext_resource type="PackedScene" uid="uid://ktm7k0co2o7l" path="res://addons/mqtt/mqtt.tscn" id="4_5sr5k"]
+[ext_resource type="Script" uid="uid://w5tdc25gjamo" path="res://panel.gd" id="5_5sr5k"]
+[ext_resource type="Shader" uid="uid://c3kbisfyum4l5" path="res://dashboard_principal.gdshader" id="6_vg131"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5sr5k"]
+shader = ExtResource("6_vg131")
+shader_parameter/blur_amount = 2.5
+shader_parameter/tint_color = Color(0.1, 0.12, 0.15, 0.8)
+
+[node name="DashboardPrincipal" type="Node2D" unique_id=1424742189]
+script = ExtResource("1_iocth")
+
+[node name="OsmTileMap" parent="." unique_id=1938237651 instance=ExtResource("1_w6jx4")]
+latitude = -12.05
+longitude = -77.13
+zoom = 17
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=487408288]
+script = ExtResource("2_xc3if")
+
+[node name="MQTT" parent="." unique_id=363398102 instance=ExtResource("4_5sr5k")]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=2099839576]
+
+[node name="BackBufferCopy" type="BackBufferCopy" parent="CanvasLayer" unique_id=1949038782]
+copy_mode = 2
+
+[node name="Panel" type="Panel" parent="CanvasLayer" unique_id=1599299666]
+clip_children = 2
+custom_minimum_size = Vector2(300, 200)
+offset_right = 384.0
+offset_bottom = 256.0
+script = ExtResource("5_5sr5k")
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/Panel" unique_id=485847197]
+material = SubResource("ShaderMaterial_5sr5k")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/Panel" unique_id=403785994]
+layout_mode = 0
+offset_left = 240.0
+offset_top = 208.0
+offset_right = 370.0
+offset_bottom = 248.0
+
+[node name="BtnEditar" type="Button" parent="CanvasLayer/Panel/HBoxContainer" unique_id=1409651858]
+layout_mode = 2
+text = "Editar"
+
+[node name="BtnEliminar" type="Button" parent="CanvasLayer/Panel/HBoxContainer" unique_id=2115586264]
+layout_mode = 2
+text = "Eliminar"
+
+[node name="BtnCerrar" type="Button" parent="CanvasLayer/Panel" unique_id=943872289]
+layout_mode = 0
+offset_left = 360.0
+offset_top = 8.0
+offset_right = 378.0
+offset_bottom = 39.0
+text = "X"
+
+[node name="MenuOpciones" type="VBoxContainer" parent="CanvasLayer" unique_id=1596977402]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -160.0
+offset_top = -216.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="BtnTotem" type="Button" parent="CanvasLayer/MenuOpciones" unique_id=683647305]
+layout_mode = 2
+toggle_mode = true
+text = "Botón de Pánico"
+
+[node name="BtnSensor" type="Button" parent="CanvasLayer/MenuOpciones" unique_id=1821115714]
+layout_mode = 2
+toggle_mode = true
+text = "Sensor de Ruido"
+
+[node name="BtnRuido" type="Button" parent="CanvasLayer/MenuOpciones" unique_id=1434025633]
+layout_mode = 2
+toggle_mode = true
+text = "Generar Ruido"
+
+[node name="OpcionesRuido" type="OptionButton" parent="CanvasLayer/MenuOpciones" unique_id=1809332487]
+layout_mode = 2
+
+[node name="BtnBorrar" type="Button" parent="CanvasLayer/MenuOpciones" unique_id=91557716]
+layout_mode = 2
+toggle_mode = true
+text = "Borrar Elemento"
+
+[node name="BtnReporte" type="Button" parent="CanvasLayer/MenuOpciones" unique_id=2092222140]
+layout_mode = 2
+toggle_mode = true
+text = "Generar Reporte"
+
+[node name="MenuCreacion" type="Panel" parent="CanvasLayer" unique_id=1805133385]
+offset_left = 392.0
+offset_top = 200.0
+offset_right = 760.0
+offset_bottom = 448.0
+
+[node name="InputDesc" type="LineEdit" parent="CanvasLayer/MenuCreacion" unique_id=693138797]
+layout_mode = 0
+offset_left = 80.0
+offset_top = 96.0
+offset_right = 288.0
+offset_bottom = 128.0
+placeholder_text = "\"Descripción\""
+
+[node name="InputLugar" type="LineEdit" parent="CanvasLayer/MenuCreacion" unique_id=1983041615]
+layout_mode = 0
+offset_left = 80.0
+offset_top = 40.0
+offset_right = 288.0
+offset_bottom = 72.0
+placeholder_text = "\"Lugar (ej: Callao)\""
+
+[node name="OpcionesUrgencia" type="OptionButton" parent="CanvasLayer/MenuCreacion" unique_id=1835641323]
+layout_mode = 0
+offset_left = 120.0
+offset_top = 176.0
+offset_right = 248.0
+offset_bottom = 200.0
+
+[node name="BtnGuardar" type="Button" parent="CanvasLayer/MenuCreacion" unique_id=645012817]
+layout_mode = 0
+offset_left = 184.0
+offset_top = 216.0
+offset_right = 256.0
+offset_bottom = 241.0
+theme_override_font_sizes/font_size = 12
+text = "Guardar"
+
+[node name="BtnCancelar" type="Button" parent="CanvasLayer/MenuCreacion" unique_id=608966369]
+layout_mode = 0
+offset_left = 272.0
+offset_top = 216.0
+offset_right = 352.0
+offset_bottom = 241.0
+theme_override_font_sizes/font_size = 12
+text = "Cancelar"
+
+[node name="OpcionesTipoReporte" type="OptionButton" parent="CanvasLayer/MenuCreacion" unique_id=1988385314]
+layout_mode = 0
+offset_left = 120.0
+offset_top = 144.0
+offset_right = 248.0
+offset_bottom = 168.0
+
+[node name="MenuLogin" type="Panel" parent="CanvasLayer" unique_id=832772750]
+visible = false
+offset_left = 392.0
+offset_top = 200.0
+offset_right = 760.0
+offset_bottom = 448.0
+
+[node name="InputUser" type="LineEdit" parent="CanvasLayer/MenuLogin" unique_id=1530086164]
+layout_mode = 0
+offset_left = 88.0
+offset_top = 56.0
+offset_right = 280.0
+offset_bottom = 87.0
+placeholder_text = "\"Usuario\""
+
+[node name="InputPass" type="LineEdit" parent="CanvasLayer/MenuLogin" unique_id=347726130]
+layout_mode = 0
+offset_left = 88.0
+offset_top = 120.0
+offset_right = 280.0
+offset_bottom = 151.0
+placeholder_text = "\"Contraseña\""
+secret = true
+
+[node name="BtnLogin" type="Button" parent="CanvasLayer/MenuLogin" unique_id=39344584]
+layout_mode = 0
+offset_left = 136.0
+offset_top = 216.0
+offset_right = 232.0
+offset_bottom = 241.0
+theme_override_font_sizes/font_size = 12
+text = "Iniciar Sesión"
