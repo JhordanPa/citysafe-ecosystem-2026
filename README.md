@@ -12,6 +12,9 @@ Recuerde descromprimir el .zip en la raiz del sistema.
 
 ### Pasos a seguir:
 
+Instalar Godot Engine, de preferencia versiones posteriores a 4.7
+Instalar Flutter y agregado al PATH del sistema
+
 1. **Apertura de una terminal con ubicacion a la carpeta**
 Abra una nueva terminal con ubicacion a esta carpeta principal `citysafe-ecosystem-2026-main`
 
@@ -74,8 +77,6 @@ El tipo_de_inicio reemplazarlo por cualquiera de su preferencia:
 
 _ejem: flutter run -d chrome_
 
-_Nota: Debe tener previamente instalado Flutter y agregado al PATH del sistema._
-
 5. **Iniciando el sistema de monitoreo**
 Abra una nueva terminal e ingrese desde ella a la carpeta /iot_industrial.
 Una vez dentro, ejecute los comandos:
@@ -113,5 +114,3 @@ una vez dentro ejecute los siguientes comandos:
     ./CitySafe_linux.x86_64
     ```
 
-_Debe tener previamente instalado Godot Engine, de preferencia
-versiones posteriores a 4.7_
