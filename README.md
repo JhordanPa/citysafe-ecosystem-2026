@@ -3,9 +3,9 @@ Sistema de Monitoreo Urbano y Gestión de Alertas de Seguridad
 
 ## Integrantes
 * Jeick Carlos Emilio Melgar Matos - [Lider]
-* Jhordan Alexis Pasion Paucar - [Participe]
-* Alex Antony Ramos Rojas - [Participe]
-* Diego Andre Yupanqui Carpio - [Participe]
+* Jhordan Alexis Pasion Paucar - [Partícipe]
+* Alex Antony Ramos Rojas - [Partícipe]
+* Diego Andre Yupanqui Carpio - [Partícipe]
 
 ## Instalación (Guía para Linux / Ubuntu)
 Recuerde descromprimir el .zip en la raiz del sistema.
@@ -73,3 +73,45 @@ El tipo_de_inicio reemplazarlo por cualquiera de su preferencia:
     mobile
 
 _ejem: flutter run -d chrome_
+
+_Nota: Debe tener previamente instalado Flutter y agregado al PATH del sistema._
+
+5. **Iniciando el sistema de monitoreo**
+Abra una nueva terminal e ingrese desde ella a la carpeta /iot_industrial.
+Una vez dentro, ejecute los comandos:
+
+    ```bash
+    source venv/bin/activate
+    python mqtt_bridge.py
+    ```
+Nuevamente abrimos otra terminal en /iot_industrial y activamos el entorno:
+
+    ```bash
+    source venv/bin/activate
+    ```
+
+Si deseamos activar un sensor acustico automàtico, ejecutamos:
+   
+    ```bash
+    source venv/bin/activate
+    python sensor_acustico.py
+    ```
+    
+Pero, si deseamos activar un botón de pónico manual, entonces, ejecutamos:
+
+    ```bash
+    source venv/bin/activate
+    python sensor_acustico.py
+    ```
+    
+6. **Iniciando simulación urbana**
+Abra una nueva terminal y desde ella vaya a /simulation_godot/aplicacion_linux,
+una vez dentro ejecute los siguientes comandos:
+
+    ```bash
+    chmod +x CitySafe_linux.x86_64
+    ./CitySafe_linux.x86_64
+    ```
+
+_Debe tener previamente instalado Godot Engine, de preferencia
+versiones posteriores a 4.7_
